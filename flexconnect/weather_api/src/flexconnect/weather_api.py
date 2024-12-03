@@ -9,8 +9,11 @@ import pyarrow
 import requests
 import structlog
 from dateutil.relativedelta import relativedelta
-from gooddata_flexconnect import ExecutionContext
-from gooddata_flight_server import ExecutionType, FlexConnectFunction, ServerContext
+from gooddata_flexconnect import (
+    ExecutionContext,
+    ExecutionType,
+    FlexConnectFunction,
+)
 from gooddata_flight_server.tasks.base import ArrowData
 from gooddata_sdk import (
     AbsoluteDateFilter,
@@ -212,5 +215,5 @@ class WeatherFunction(FlexConnectFunction):
         return pyarrow.table(output)
 
     @staticmethod
-    def on_load(ctx: ServerContext) -> None:
+    def on_load(ctx: gf.ServerContext) -> None:
         WeatherFunction.ApiKey = os.getenv("WEATHER_API_KEY")
