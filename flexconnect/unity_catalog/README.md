@@ -1,4 +1,4 @@
-# FlexConnect: Integrate MongoDB with GoodData
+# FlexConnect: Integrate Unity Catalog with GoodData
 
 This repository demonstrates how to connect Unity Catalog to GoodData using FlexConnect. By leveraging FlexConnect, you can seamlessly bring data from Unity Catalog into your BI reports without the complexity of data pipelines or SQL queries.
 
@@ -46,9 +46,9 @@ These files are included in the repository.
 
 ### Installation
 
-#### Configure MongoDB Connection:
+#### Configure Databricks Connection:
 
-Ensure your Unity Catalog credentials and configurations are accessible to the server. Update your `.env` file with the necessary credentials:
+Ensure your Databricks credentials and configurations are accessible to the server. Update your `.env` file with the necessary credentials:
 
 
 ```

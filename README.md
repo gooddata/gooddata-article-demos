@@ -18,12 +18,12 @@ Each of the articles is in it's own subdirectory, including README and LICENSE.
 
 FlexConnect articles are not yet public, we will update the names with links as soon as they are.
 
-- FlexConnect: Build Your Own Data Source
-- FlexConnect: Integrate Any APIs Into BI
-- FlexConnect: Integrate NoSQL Into BI
-- FlexConnect: ML in BI Made Easy
-- FlexConnect: Integrating Unity Catalog Into Your BI
-- FlexConnect: Bridging Kafka and BI
+- [FlexConnect: Build Your Own Data Source](https://medium.com/gooddata-developers/flexconnect-build-your-own-data-source-f4f0c8816bea)
+- [FlexConnect: Integrate Any APIs Into BI](https://medium.com/gooddata-developers/flexconnect-integrate-any-apis-into-bi-b0b9b1e7a230)
+- [FlexConnect: Integrate NoSQL Into BI](https://medium.com/gooddata-developers/flexconnect-integrate-nosql-to-bi-cfe50a5d25ff)
+- [FlexConnect: ML in BI Made Easy](https://medium.com/gooddata-developers/flexconnect-ml-in-bi-made-easy-b0067f9b2317)
+- [FlexConnect: Integrating Unity Catalog Into Your BI](https://medium.com/gooddata-developers/flexconnect-integrating-unity-catalog-into-your-bi-df0d932a2c4e)
+- [FlexConnect: Bridging Kafka and BI](https://medium.com/gooddata-developers/flexconnect-bridging-kafka-and-bi-10729dfc6384)
 
 
 ## Contributing
