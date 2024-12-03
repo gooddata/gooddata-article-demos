@@ -32,7 +32,7 @@ All the requirements are in the `requirements.txt` file
 
 ### Installation
 
-#### Configure MongoDB Connection:
+#### Pre-train Machine Learning Model
 
 Ensure you have your pre-trained ML model saved (e.g., revenue_model.pkl) and place it in the project directory.
 
