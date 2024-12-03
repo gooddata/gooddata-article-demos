@@ -1,3 +1,4 @@
+# (C) 2024 GoodData Corporation
 import calendar
 import os
 from datetime import datetime, timedelta

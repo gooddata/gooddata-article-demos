@@ -1,3 +1,4 @@
+# (C) 2024 GoodData Corporation
 import os
 from typing import Optional
 
