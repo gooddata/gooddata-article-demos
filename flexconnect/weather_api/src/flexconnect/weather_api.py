@@ -17,8 +17,6 @@ from gooddata_flexconnect import (
 from gooddata_flight_server.tasks.base import ArrowData
 from gooddata_sdk import (
     AbsoluteDateFilter,
-    Filter,
-    NegativeAttributeFilter,
     PositiveAttributeFilter,
     RelativeDateFilter,
 )
@@ -29,6 +27,16 @@ HISTORICAL_URL = "https://api.weatherapi.com/v1/history.json"
 FORECAST_URL = "https://api.weatherapi.com/v1/forecast.json"
 
 class WeatherFunction(FlexConnectFunction):
+    """FlexConnectFunction implementation for fetching weather data from WeatherAPI.
+
+    This class retrieves historical and forecast weather data based on the provided
+    execution context, which includes date filters and location information. It processes
+    various date granularities and combines historical and forecast data into a single output.
+
+    Attributes:
+        Name (str): The name of the FlexConnectFunction.
+        Schema (pyarrow.Schema): The output schema defining the data fields and types.
+    """
     Name = "WeatherAPIFlexConnect"
     Schema = pyarrow.schema(
         [
@@ -40,7 +48,19 @@ class WeatherFunction(FlexConnectFunction):
     )
 
     def _handle_date(self, context: Optional[ExecutionContext]) -> tuple[str, str]:
-        """Extract the from_date and to_date from the execution context filters."""
+        """Extracts the from_date and to_date from the execution context filters.
+
+        Processes date filters from the execution context to determine the date range
+        for which to fetch weather data. Supports various granularities such as DAY,
+        WEEK, MONTH, and YEAR. If no date filters are provided, defaults to last week
+        plus one day ahead.
+
+        Args:
+            context (Optional[ExecutionContext]): The execution context containing filters.
+
+        Returns:
+            tuple[str, str]: A tuple containing the from_date and to_date in ISO format.
+        """
 
         now = datetime.now()
         for date_filter in context.filters:
@@ -98,7 +118,17 @@ class WeatherFunction(FlexConnectFunction):
         return from_date, to_date
 
     def _extract_location(self, execution_context: ExecutionContext) -> str:
-        """Extract the location from the execution context filters."""
+        """Extracts the location from the execution context filters.
+
+        Looks for a PositiveAttributeFilter with label_identifier 'customer_city' to determine
+        the location. Defaults to 'San Francisco' if not found.
+
+        Args:
+            execution_context (ExecutionContext): The execution context containing filters.
+
+        Returns:
+            str: The location extracted from the filters or the default location.
+        """
         # Default location
         location = "San Francisco"
         for filter in execution_context.report_execution_request.filters:
@@ -111,7 +141,19 @@ class WeatherFunction(FlexConnectFunction):
         return location
 
     def _get_historical_data(self, fromdate: str, todate: str, location: str) -> dict[str, Any]:
-        """Retrieve and process historical weather data."""
+        """Retrieves and processes historical weather data.
+
+        Fetches historical weather data from the WeatherAPI for the specified date range and location.
+        Processes the response to extract hourly temperature and chance of rain.
+
+        Args:
+            fromdate (str): The start date in ISO format.
+            todate (str): The end date in ISO format.
+            location (str): The location for which to fetch weather data.
+
+        Returns:
+            dict[str, Any]: A dictionary containing historical weather data.
+        """
         clamped_time = min(datetime.now(), datetime.fromisoformat(todate)).date().isoformat()
         params = {
             "key": WeatherFunction.ApiKey,
@@ -137,7 +179,18 @@ class WeatherFunction(FlexConnectFunction):
         return output
 
     def _get_forecast_data(self, days: int, location: str) -> dict[str, Any]:
-        """Retrieve and process forecast weather data."""
+        """Retrieves and processes forecast weather data.
+
+        Fetches forecast weather data from the WeatherAPI for the specified number of days ahead and location.
+        Processes the response to extract hourly temperature and chance of rain. The free plan allows up to 3 days.
+
+        Args:
+            days (int): Number of days ahead for which to fetch forecast data.
+            location (str): The location for which to fetch weather data.
+
+        Returns:
+            dict[str, Any]: A dictionary containing forecast weather data.
+        """
         days = min(days, 3)  # Forecast for free plans is up to 3 days
         if days <= 0:
             return {
@@ -176,6 +229,23 @@ class WeatherFunction(FlexConnectFunction):
         columns: Optional[tuple[str, ...]],
         headers: dict[str, list[str]],
     ) -> ArrowData:
+        """Executes the FlexConnectFunction to fetch and return weather data.
+
+        Processes the execution context to extract date range and location. Retrieves historical
+        and forecast weather data accordingly and combines them into a single output. Handles
+        label elements execution if required.
+
+        Args:
+            parameters (dict): Dictionary of parameters including the execution context.
+            columns (Optional[tuple[str, ...]]): Tuple of requested column names.
+            headers (dict[str, list[str]]): Headers from the request.
+
+        Returns:
+            ArrowData: An Arrow table containing the weather data.
+
+        Raises:
+            ValueError: If no execution context is provided.
+        """
         execution_context = ExecutionContext.from_parameters(parameters)
         if execution_context is None:
             # This can happen for invalid invocations that do not come from GoodData
@@ -216,4 +286,15 @@ class WeatherFunction(FlexConnectFunction):
 
     @staticmethod
     def on_load(ctx: gf.ServerContext) -> None:
+        """Loads the API key from environment variables when the function is loaded.
+
+        This method is called once when the server starts. It retrieves the WeatherAPI
+        key from environment variables and stores it for use in API requests.
+
+        Args:
+            ctx (gf.ServerContext): The server context.
+
+        Returns:
+            None
+        """
         WeatherFunction.ApiKey = os.getenv("WEATHER_API_KEY")

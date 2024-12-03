@@ -28,6 +28,17 @@ _LOGGER = structlog.get_logger("machine_learning_flexconnect")
 FORECAST_URL = "https://api.weatherapi.com/v1/forecast.json"
 
 class MachineLearningFlexConnect(FlexConnectFunction):
+    """FlexConnectFunction implementation for machine learning revenue prediction.
+    This class predicts revenue based on date and weather data using a pre-trained
+    machine learning model. It retrieves weather forecasts for the specified dates
+    and location, prepares the features, and then uses the model to predict revenue.
+
+    Attributes:
+        Name (str): The name of the FlexConnectFunction.
+        Schema (dict): The output schema for the function.
+        model: The pre-trained machine learning model used for predictions.
+        API_KEY (str): API key for accessing the weather API.
+    """
     Name = "MachineLearningFlexConnect"
     Schema = {
         "date": pyarrow.date32(),
@@ -38,7 +49,18 @@ class MachineLearningFlexConnect(FlexConnectFunction):
     API_KEY = None
 
     def _handle_date(self, context: ExecutionContext) -> list[datetime]:
-        """Extract a list of dates from the execution context filters."""
+        """Extracts a list of dates from the execution context filters.
+
+        If date filters are provided in the execution context, it processes them to generate
+        a list of dates to predict for. If no date filters are provided, it defaults to
+        predicting for the next 7 days.
+
+        Args:
+            context (ExecutionContext): The execution context containing report execution request and filters.
+
+        Returns:
+            list[datetime]: A list of datetime objects representing the dates to predict for.
+        """
         now = datetime.now()
         date_list = []
 
@@ -65,7 +87,17 @@ class MachineLearningFlexConnect(FlexConnectFunction):
         return date_list
 
     def _extract_location(self, execution_context: ExecutionContext) -> str:
-        """Extract the location from the execution context filters."""
+        """Extracts the location from the execution context filters.
+
+        It looks for a PositiveAttributeFilter with label_identifier 'customer_city' to determine
+        the location. If not found, defaults to 'San Francisco'.
+
+        Args:
+            execution_context (ExecutionContext): The execution context containing filters.
+
+        Returns:
+            str: The location extracted from the filters or the default location.
+        """
         # Default location
         location = "San Francisco"
         for filter in execution_context.filters:
@@ -78,7 +110,18 @@ class MachineLearningFlexConnect(FlexConnectFunction):
         return location
 
     def _get_weather_data(self, dates: list[datetime], location: str) -> dict[str, list[any]]:
-        """Retrieve weather data for the given dates and location."""
+        """Retrieves weather data for the given dates and location.
+
+        Fetches weather forecast data from the weather API for the specified future dates
+        and location. The weather data includes average temperature and daily chance of rain.
+
+        Args:
+            dates (list[datetime]): List of datetime objects for which to fetch weather data.
+            location (str): Location for which to fetch weather data.
+
+        Returns:
+            dict[str, list[any]]: A dictionary containing weather data with keys 'Date', 'Temperature', and 'Rain'.
+        """
         output = {
             'Date': [],
             'Temperature': [],
@@ -121,7 +164,18 @@ class MachineLearningFlexConnect(FlexConnectFunction):
     def _prepare_features(
         self, date_list: list[datetime], weather_data: dict[str, list[any]]
     ) -> dict[str, list[any]]:
-        """Prepare input features for the model based on the date list and weather data."""
+        """Prepares input features for the model based on the date list and weather data.
+
+        Constructs a feature set that includes day of the week, month, temperature, and rain probability.
+        Aligns weather data with the date list and handles any missing weather data.
+
+        Args:
+            date_list (list[datetime]): List of dates for which to prepare features.
+            weather_data (dict[str, list[any]]): Weather data corresponding to the dates.
+
+        Returns:
+            dict[str, list[any]]: A dictionary of input features for the model.
+        """
         # Align weather data with date_list
         weather_df = {
             date: {'temperature': temp, 'rain': rain}
@@ -156,6 +210,23 @@ class MachineLearningFlexConnect(FlexConnectFunction):
         columns: Optional[tuple[str, ...]],
         headers: dict[str, list[str]],
     ) -> gf.ArrowData:
+        """Executes the FlexConnectFunction to predict revenue.
+
+        This method is called when the function is invoked. It processes the execution context,
+        handles date and location extraction, retrieves weather data, prepares features,
+        and uses the model to make predictions. Returns the results as an Arrow table.
+
+        Args:
+            parameters (dict): Dictionary of parameters including the execution context.
+            columns (Optional[tuple[str, ...]]): Tuple of requested column names.
+            headers (dict[str, list[str]]): Headers from the request.
+
+        Returns:
+            gf.ArrowData: An Arrow table containing the prediction results.
+
+        Raises:
+            ValueError: If no execution context is provided or insufficient data for prediction.
+        """
         execution_context = ExecutionContext.from_parameters(parameters)
         if execution_context is None:
             raise ValueError("Function did not receive execution context.")
@@ -191,7 +262,19 @@ class MachineLearningFlexConnect(FlexConnectFunction):
 
     @staticmethod
     def on_load(ctx: gf.ServerContext) -> None:
-        # Load the ML model from a pickle file on load to reduce response time.
+        """Loads the machine learning model and API key when the function is loaded.
+
+        This method is called once when the server starts. It loads the pre-trained machine
+        learning model from a pickle file and retrieves the weather API key from environment variables.
+
+        The model is loaded in on_load, to reduce the response time, as it may not be instantaneous.
+
+        Args:
+            ctx (gf.ServerContext): The server context.
+
+        Returns:
+            None
+        """
         with open('revenue_model.pkl', 'rb') as model_file:
             MachineLearningFlexConnect.model = pickle.load(model_file)
         _LOGGER.info("Model loaded successfully")
