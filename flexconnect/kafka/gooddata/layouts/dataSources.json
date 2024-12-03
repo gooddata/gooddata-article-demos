@@ -1,0 +1,13 @@
+{
+  "dataSources": [
+    {
+      "cacheStrategy": "NEVER",
+      "id": "kafka_connector",
+      "name": "Kafka connector",
+      "permissions": [],
+      "schema": "",
+      "type": "FLEXCONNECT",
+      "url": "grpc://gooddata-flexconnect-server:17001"
+    }
+  ]
+}

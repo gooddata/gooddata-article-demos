@@ -1,0 +1,10 @@
+# (C) 2024 GoodData Corporation
+
+[flexconnect]
+
+# specify one or more modules that contain FlexConnection function implementations
+#
+functions = [
+    "flexconnect.kafka_direct_function",
+    "flexconnect.kafka_function",
+]
