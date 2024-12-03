@@ -1,0 +1,112 @@
+services:
+  gooddata-cn-ce:
+    image: gooddata/gooddata-cn-ce:3.24.0
+    ports:
+      - "3000:3000"
+      - "5432:5432"
+    volumes:
+      - gooddata-cn-ce-data:/data
+    environment:
+      APP_LOGLEVEL: "INFO"
+      GDCN_LICENSE_KEY: ${GDCN_LICENSE_KEY}
+      GDC_FEATURES_VALUES_ENABLE_FLIGHTRPC_DATA_SOURCE: "true"
+    profiles:
+      - all
+      - gooddata
+
+  gooddata-flexconnect-server:
+    build:
+      context: gooddata-flexconnect
+      dockerfile: Dockerfile
+    ports:
+      - "17001:17001"
+    volumes:
+      - ./gooddata-flexconnect/config:/tmp/config:Z
+      - ./data:/tmp/data/kafka:Z:ro
+    command:
+      - start
+      - --methods-provider
+      - gooddata_flexconnect
+      - --config
+      - /tmp/config/dev.server.toml
+      - /tmp/config/flexconnect.config.toml
+      - --dev-log
+    environment:
+      GOODDATA_FLIGHT_SERVER__LISTEN_HOST: "0.0.0.0"
+      GOODDATA_FLIGHT_SERVER__LISTEN_PORT: 17001
+      GOODDATA_FLIGHT_SERVER__ADVERTISE_HOST: "gooddata-flexconnect-server"
+      GOODDATA_FLIGHT_SERVER__ADVERTISE_PORT: 17001
+      GOODDATA_FLIGHT_SERVER__HEALTH_CHECK_HOST: "0.0.0.0"
+      GOODDATA_FLIGHT_SERVER__HEALTH_CHECK_PORT: 8877
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8877/live" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    profiles:
+      - all
+      - gooddata
+
+  upload-layout:
+    build:
+      context: gooddata/layouts
+      dockerfile: Dockerfile
+    environment:
+      HOST: "http://gooddata-cn-ce:3000"
+      HEADER_HOST: localhost
+    command: [ "python3", "upload_demo_layout.py" ]
+    volumes:
+      - ./gooddata/layouts:/app:Z:ro
+    profiles:
+      - all
+      - gooddata
+
+  kafka:
+    image: apache/kafka:latest
+    container_name: kafka
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://kafka:9092,CONTROLLER://kafka:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_NUM_PARTITIONS: 3
+    profiles:
+      - all
+      - kafka
+
+  consumer:
+    build:
+      context: kafka/consumer
+      dockerfile: Dockerfile
+    depends_on:
+      kafka:
+        condition: service_started
+    volumes:
+      - ./data:/tmp/data/kafka:Z:ro
+    profiles:
+      - all
+      - kafka
+
+  producer:
+    build:
+      context: kafka/producer
+      dockerfile: Dockerfile
+    depends_on:
+      kafka:
+        condition: service_started
+    profiles:
+      - all
+      - kafka
+
+volumes:
+  gooddata-cn-ce-data:

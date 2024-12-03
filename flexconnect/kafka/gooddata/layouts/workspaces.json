@@ -1,0 +1,250 @@
+{
+  "workspaceDataFilters": [],
+  "workspaces": [
+    {
+      "automations": [],
+      "customApplicationSettings": [],
+      "filterViews": [],
+      "hierarchyPermissions": [],
+      "id": "financial_transactions",
+      "model": {
+        "analytics": {
+          "analyticalDashboardExtensions": [],
+          "analyticalDashboards": [],
+          "attributeHierarchies": [],
+          "dashboardPlugins": [],
+          "exportDefinitions": [],
+          "filterContexts": [],
+          "metrics": [],
+          "visualizationObjects": [
+            {
+              "content": {
+                "buckets": [
+                  {
+                    "items": [
+                      {
+                        "measure": {
+                          "localIdentifier": "708b56c544aa43fc8afa936d46f28df0",
+                          "definition": {
+                            "measureDefinition": {
+                              "item": {
+                                "identifier": {
+                                  "id": "KafkaFlexConnectFunction.amount",
+                                  "type": "fact"
+                                }
+                              },
+                              "aggregation": "sum",
+                              "filters": []
+                            }
+                          },
+                          "title": "Sum of Amount",
+                          "format": "#,##0.00"
+                        }
+                      }
+                    ],
+                    "localIdentifier": "measures"
+                  },
+                  {
+                    "items": [
+                      {
+                        "attribute": {
+                          "localIdentifier": "dd4eddfae5be4adebc93f2af2078400e",
+                          "displayForm": {
+                            "identifier": {
+                              "id": "timestamp.minute",
+                              "type": "label"
+                            }
+                          }
+                        }
+                      }
+                    ],
+                    "localIdentifier": "view"
+                  },
+                  {
+                    "items": [
+                      {
+                        "attribute": {
+                          "localIdentifier": "6529e917eda342e683a8a835436d1502",
+                          "displayForm": {
+                            "identifier": {
+                              "id": "KafkaFlexConnectFunction.transaction_type",
+                              "type": "label"
+                            }
+                          }
+                        }
+                      }
+                    ],
+                    "localIdentifier": "stack"
+                  }
+                ],
+                "filters": [
+                  {
+                    "positiveAttributeFilter": {
+                      "localIdentifier": "2b4f4ca7d7eb4b39945ff6eaaa6064fe",
+                      "displayForm": {
+                        "identifier": {
+                          "id": "KafkaFlexConnectFunction.currency",
+                          "type": "label"
+                        }
+                      },
+                      "in": {
+                        "values": [
+                          "EUR"
+                        ]
+                      }
+                    }
+                  }
+                ],
+                "sorts": [],
+                "properties": {},
+                "visualizationUrl": "local:column",
+                "version": "2"
+              },
+              "createdAt": "2024-12-01 17:04",
+              "createdBy": {
+                "id": "demo",
+                "type": "user"
+              },
+              "description": "",
+              "id": "transactions",
+              "title": "Transactions"
+            }
+          ]
+        },
+        "ldm": {
+          "datasets": [
+            {
+              "attributes": [
+                {
+                  "description": "Account id",
+                  "id": "KafkaFlexConnectFunction.account_id",
+                  "labels": [],
+                  "sourceColumn": "account_id",
+                  "sourceColumnDataType": "STRING",
+                  "tags": [
+                    "KafkaFlexConnectFunction"
+                  ],
+                  "title": "Account id"
+                },
+                {
+                  "description": "Currency",
+                  "id": "KafkaFlexConnectFunction.currency",
+                  "labels": [],
+                  "sourceColumn": "currency",
+                  "sourceColumnDataType": "STRING",
+                  "tags": [
+                    "KafkaFlexConnectFunction"
+                  ],
+                  "title": "Currency"
+                },
+                {
+                  "description": "Transaction id",
+                  "id": "KafkaFlexConnectFunction.transaction_id",
+                  "labels": [],
+                  "sourceColumn": "transaction_id",
+                  "sourceColumnDataType": "STRING",
+                  "tags": [
+                    "KafkaFlexConnectFunction"
+                  ],
+                  "title": "Transaction id"
+                },
+                {
+                  "description": "Transaction type",
+                  "id": "KafkaFlexConnectFunction.transaction_type",
+                  "labels": [],
+                  "sourceColumn": "transaction_type",
+                  "sourceColumnDataType": "STRING",
+                  "tags": [
+                    "KafkaFlexConnectFunction"
+                  ],
+                  "title": "Transaction type"
+                }
+              ],
+              "dataSourceTableId": {
+                "dataSourceId": "kafka_connector",
+                "id": "KafkaFlexConnectFunction",
+                "path": [
+                  "KafkaFlexConnectFunction"
+                ],
+                "type": "dataSource"
+              },
+              "description": "KafkaFlexConnectFunction",
+              "facts": [
+                {
+                  "description": "Amount",
+                  "id": "KafkaFlexConnectFunction.amount",
+                  "sourceColumn": "amount",
+                  "sourceColumnDataType": "NUMERIC",
+                  "tags": [
+                    "KafkaFlexConnectFunction"
+                  ],
+                  "title": "Amount"
+                }
+              ],
+              "grain": [],
+              "id": "KafkaFlexConnectFunction",
+              "references": [
+                {
+                  "identifier": {
+                    "id": "timestamp",
+                    "type": "dataset"
+                  },
+                  "multivalue": false,
+                  "sources": [
+                    {
+                      "column": "timestamp",
+                      "dataType": "TIMESTAMP",
+                      "target": {
+                        "id": "timestamp",
+                        "type": "date"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "tags": [
+                "KafkaFlexConnectFunction"
+              ],
+              "title": "KafkaFlexConnectFunction"
+            }
+          ],
+          "dateInstances": [
+            {
+              "description": "",
+              "granularities": [
+                "MINUTE",
+                "HOUR",
+                "DAY",
+                "WEEK",
+                "MONTH",
+                "QUARTER",
+                "YEAR",
+                "MINUTE_OF_HOUR",
+                "HOUR_OF_DAY",
+                "DAY_OF_WEEK",
+                "DAY_OF_MONTH",
+                "DAY_OF_YEAR",
+                "WEEK_OF_YEAR",
+                "MONTH_OF_YEAR",
+                "QUARTER_OF_YEAR"
+              ],
+              "granularitiesFormatting": {
+                "titleBase": "",
+                "titlePattern": "%titleBase - %granularityTitle"
+              },
+              "id": "timestamp",
+              "tags": [
+                "Timestamp"
+              ],
+              "title": "Timestamp"
+            }
+          ]
+        }
+      },
+      "name": "Financial transactions",
+      "permissions": [],
+      "settings": [],
+      "userDataFilters": []
+    }
+  ]
+}

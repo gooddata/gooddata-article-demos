@@ -1,0 +1,2 @@
+kafka-python-ng
+Faker==30.8.2
