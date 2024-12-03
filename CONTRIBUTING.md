@@ -61,6 +61,14 @@ Python projects document code by docstrings in [google-like](https://google.gith
 
 For any front-end related projects, please follow the best practices of [gooddata-ui-sdk](https://github.com/gooddata/gooddata-ui-sdk/blob/master/dev_docs/contributing.md).
 
+**All applicable files should have copyright header.** This includes, but is not limited to `.py`, `.yaml`, `.sh`, `.toml` and `.ini` files. When unsure whether a file needs a copyright header, please contact the maintainers.
+
+Example of a copyright header:
+
+```
+# (C) 2024 GoodData Corporation
+```
+
 ---
 
 ## Project Necessities
