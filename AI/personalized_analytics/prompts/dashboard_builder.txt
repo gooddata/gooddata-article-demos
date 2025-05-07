@@ -1,0 +1,121 @@
+Explore the image of a dashboard you get on input and transform it into interactive GoodData dashboard layout.
+
+Use visualization IDs to connect the existing visualizations into the newly created dashboard. Find the most similar visualizations to the image based on the visualization chart type, visualization name and possibly also its description.
+
+--------
+## Dashboard should be represented as a YAML file with the following structure:
+
+type: dashboard
+id: # A unique identifier of the dashboard
+
+title: # An optional human-readable title for the visualization. Derived from id, when not provided explicitly.
+description: # An optional description of the visualization
+tags: # An optional list of tags
+
+filters: # An optional map of filters to apply to the dashboard
+  [filter_name]: # Absolute date filter
+    type: date_filter
+    title: # An optional human-readable title for the filter
+    mode: # A mode the filter is working in, one of "readonly", "hidden", "active"
+    date: # A date dataset id to use for the filter (omitted for the first date filter)
+    from: # A string with specific date, e.g. "2020-01-01"
+    to: # A string with specific date, e.g. "2020-01-01"
+  [filter_name]: # Relative date filter
+    type: date_filter
+    title: # An optional human-readable title for the filter
+    mode: # A mode the filter is working in, one of "readonly", "hidden", "active"
+    date: # A date dataset id to use for the filter (omitted for the first date filter)
+    granularity: # A granularity to use for the filter, one of MINUTE, HOUR, DAY, WEEK, MONTH, QUARTER, YEAR,
+                 # MINUTE_OF_HOUR, HOUR_OF_DAY, DAY_OF_WEEK, DAY_OF_MONTH, DAY_OF_YEAR, WEEK_OF_YEAR,
+                 # MONTH_OF_YEAR, QUARTER_OF_YEAR
+    from: # A number specifying how many periods to start from, e.g. -1 for previous period
+    to: # A number specifying how many periods to end with, e.g. -2 for two periods ago
+  [filter_name]: # Attribute filter
+    type: attribute_filter
+    title: # An optional human-readable title for the filter
+    mode: # A mode the filter is working in, one of "readonly", "hidden", "active"
+    using: # An attribute or attribute label id to use for the filter
+    multiselect: # A boolean flag to enable multiselect
+    parents: # An optional list of parent attribute filter names to limit the available options in the filter
+    state: # the default state of the filter, should contain either include or exclude. Omit in case the filter should display all items.
+      # In case of multiselect set to false, should contain a single array of values
+      include: # An array of attribute values to include
+      exclude: # An array of attribute values to exclude
+cross_filtering: # A boolean flag to enable cross-filtering between the widgets
+
+sections: # A list of sections in the dashboard
+  - title: # Optional section title
+    description: # Optional section description
+    widgets: # An array of widgets in the section
+      - visualization: # A visualization id to be rendered in this widget
+        title: # An optional title override for the widget. When omitted, the visualization title is used
+        description: # An optional description override for the widget. When omitted, the visualization description is used
+                     # Disable description for a widget by setting it to false
+        columns: # A number of columns that widget should occupy on the dashboard layout [1..12]
+        rows: # A number of rows that widget should occupy on the dashboard layout, each row is 20px high
+        ignored_filters: # An optional list of filters to ignore for this widget
+          - # Value of the filter's using property
+        zoom_data: # An optional boolean flag to enable zooming in the widget
+        interactions: # A list of interaction user can do with the widget
+          - # drill to plain URL
+            click_on: # A field name that triggers the interaction
+            open_url: # A string with a URL to open
+          - # drill to URL from attribute
+            click_on: # A field name that triggers the interaction
+            open_url: # A reference to attribute or label that holds the URL
+              href: # An attribute or label id to use for the URL
+              label: # An attribute or label id to use for the URL label
+          - # drill to dashboard
+            click_on: # A field name that triggers the interaction
+            open_dashboard: # A dashboard id to open
+          - # drill to visualization
+            click_on: # Query field ID in the widget visualisation. Take it from the visualization's query property. This is neither the visualization ID, nor field ID from the model.
+            open_visualization: # A visualization id to open
+--------
+
+## Here is an example of a dashboard:
+type: dashboard
+id: my_dashboard
+
+title: My Dashboard
+description: A dashboard with some visualizations
+tags:
+  - dashboard
+  - retail
+
+filters:
+  order_date:
+    type: date_filter
+    from: 2024-01-01
+    to: 2024-12-31
+  return_date:
+    type: date_filter
+    title: Return Date
+    date: return_date_dataset
+    granularity: MONTH
+    from: -3
+    to: 0
+  country_filter:
+    type: attribute_filter
+    title: Country of Ordering
+    using: country
+    multiselect: true
+    state:
+      include:
+        - USA
+        - Canada
+
+cross_filtering: true
+
+sections:
+  - title: My First Section
+    description: A section with some visualizations
+    widgets:
+      - visualization: revenue_by_country
+        date: order_date
+        interactions:
+          - click_on: country
+            open_dashboard: country_dashboard
+
+
+___PROMPT HAS BEEN SHORTENED FOR IP PURPOSES___

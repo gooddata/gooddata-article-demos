@@ -1,0 +1,318 @@
+{
+    "type": "json_schema",
+    "json_schema": {
+        "name": "visualisations_schema",
+        "schema": {
+            "type": "object",
+            "properties": {
+                "personas": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "title": "Persona",
+                        "description": "A persona with a list of visualisations.",
+                        "properties": {
+                            "title": {
+                                "type": "string",
+                                "description": "A short title of the persona."
+                            },
+                            "description": {
+                                "type": "string",
+                                "description": "A short description of the persona."
+                            },
+                            "visualisations": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "title": "Visualisation",
+                                    "description": "JSON schema for GoodData Analytics Visualisation",
+                                    "properties": {
+                                        "type": {
+                                            "description": "Type of visualisation. bar_chart has horizontal bars, while column_chart has vertical columns.",
+                                            "type": "string",
+                                            "enum": [
+                                                "table",
+                                                "bar_chart",
+                                                "column_chart",
+                                                "line_chart",
+                                                "area_chart",
+                                                "scatter_chart",
+                                                "bubble_chart",
+                                                "pie_chart",
+                                                "donut_chart",
+                                                "treemap_chart",
+                                                "pyramid_chart",
+                                                "funnel_chart",
+                                                "heatmap_chart",
+                                                "bullet_chart",
+                                                "waterfall_chart",
+                                                "dependency_wheel_chart",
+                                                "sankey_chart",
+                                                "headline_chart",
+                                                "combo_chart",
+                                                "geo_chart",
+                                                "repeater_chart"
+                                            ]
+                                        },
+                                        "id": {
+                                            "type": "string",
+                                            "description": "A unique identifier of the visualisation. It has to be unique from all the existing visualizations"
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "description": "An optional human-readable title for the visualisation."
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "description": "An optional description of the visualisation."
+                                        },
+                                        "tags": {
+                                            "type": "array",
+                                            "description": "A list of metadata tags for this visualisation.",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "query": {
+                                            "type": "object",
+                                            "description": "Defines the data used in this visualization.",
+                                            "properties": {
+                                                "fields": {
+                                                    "type": "object",
+                                                    "description": "A dictionary where each key is a field name, and the value is its definition.",
+                                                    "additionalProperties": {
+                                                        "type": "object",
+                                                        "description": "A field definition. The structure depends on the type of field.",
+                                                        "properties": {
+                                                            "using": {
+                                                                "type": "string",
+                                                                "description": "Defines the attribute, fact, or label to use for this field."
+                                                            },
+                                                            "aggregation": {
+                                                                "type": "string",
+                                                                "enum": [
+                                                                    "SUM",
+                                                                    "COUNT",
+                                                                    "APPROXIMATE_COUNT",
+                                                                    "AVG",
+                                                                    "MIN",
+                                                                    "MAX",
+                                                                    "MEDIAN",
+                                                                    "RUNSUM"
+                                                                ],
+                                                                "description": "An optional aggregation method for calculated metrics. Required if 'using' references a fact (i.e., contains '/fact/XXX')."
+                                                            },
+                                                            "title": {
+                                                                "type": "string",
+                                                                "description": "An optional human-readable title for the field."
+                                                            },
+                                                            "compute_ratio": {
+                                                                "type": "boolean",
+                                                                "description": "Indicates whether this metric should be displayed as a ratio."
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "using"
+                                                        ],
+                                                        "allOf": [
+                                                            {
+                                                                "if": {
+                                                                    "properties": {
+                                                                        "using": {
+                                                                            "pattern": "/fact/.*"
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "then": {
+                                                                    "required": [
+                                                                        "aggregation"
+                                                                    ]
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                },
+                                                "filter_by": {
+                                                    "type": "object",
+                                                    "description": "A dictionary of filters applied to the visualisation.",
+                                                    "additionalProperties": {
+                                                        "oneOf": [
+                                                            {
+                                                                "type": "object",
+                                                                "description": "Attribute filter",
+                                                                "properties": {
+                                                                    "type": {
+                                                                        "type": "string",
+                                                                        "enum": [
+                                                                            "attribute_filter"
+                                                                        ]
+                                                                    },
+                                                                    "using": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "state": {
+                                                                        "type": "object",
+                                                                        "properties": {
+                                                                            "include": {
+                                                                                "type": "array",
+                                                                                "items": {
+                                                                                    "type": "string"
+                                                                                }
+                                                                            },
+                                                                            "exclude": {
+                                                                                "type": "array",
+                                                                                "items": {
+                                                                                    "type": "string"
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "type",
+                                                                    "using",
+                                                                    "state"
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                },
+                                                "sort_by": {
+                                                    "type": "array",
+                                                    "description": "Sorting criteria for the visualisation.",
+                                                    "items": {
+                                                        "oneOf": [
+                                                            {
+                                                                "type": "object",
+                                                                "description": "Attribute sort",
+                                                                "properties": {
+                                                                    "type": {
+                                                                        "type": "string",
+                                                                        "enum": [
+                                                                            "attribute_sort"
+                                                                        ]
+                                                                    },
+                                                                    "by": {
+                                                                        "type": "string",
+                                                                        "description": "Reference to a local variable used in query.field property"
+                                                                    },
+                                                                    "aggregation": {
+                                                                        "type": "string",
+                                                                        "enum": [
+                                                                            "SUM"
+                                                                        ]
+                                                                    },
+                                                                    "direction": {
+                                                                        "type": "string",
+                                                                        "enum": [
+                                                                            "ASC",
+                                                                            "DESC"
+                                                                        ]
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "type",
+                                                                    "by",
+                                                                    "aggregation",
+                                                                    "direction"
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "config": {
+                                            "type": "object",
+                                            "description": "Configuration of the visualisation."
+                                        },
+                                        "metrics": {
+                                            "type": "array",
+                                            "description": "A list of metrics in this visualisation.",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string"
+                                                    },
+                                                    "format": {
+                                                        "type": "string"
+                                                    },
+                                                    "axes": {
+                                                        "type": "string",
+                                                        "enum": [
+                                                            "primary",
+                                                            "secondary"
+                                                        ]
+                                                    },
+                                                    "totals": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "type": {
+                                                                    "type": "string",
+                                                                    "enum": [
+                                                                        "SUM",
+                                                                        "AVG",
+                                                                        "MAX",
+                                                                        "MIN",
+                                                                        "MED",
+                                                                        "NAT"
+                                                                    ]
+                                                                },
+                                                                "title": {
+                                                                    "type": "string"
+                                                                },
+                                                                "using": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "required": [
+                                                                "type",
+                                                                "title",
+                                                                "using"
+                                                            ]
+                                                        }
+                                                    }
+                                                },
+                                                "required": [
+                                                    "field",
+                                                    "format"
+                                                ]
+                                            }
+                                        },
+                                        "view_by": {
+                                            "type": "array",
+                                            "description": "A list of attributes from the query that represent slices in this visualisation. Can contain only IDs referencing atribute or label fields in the query, not metrics or facts.",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "segment_by": {
+                                            "type": "array",
+                                            "description": "A list of attributes from the query that represent stacks or segments in this visualisation. Can contain only IDs referencing atribute or label fields in the query, not metrics or facts.",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    },
+                                    "required": [
+                                        "id",
+                                        "type",
+                                        "query",
+                                        "metrics"
+                                    ]
+                                }
+                            }
+                        },
+                        "required": [
+                            "description",
+                            "visualisations"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

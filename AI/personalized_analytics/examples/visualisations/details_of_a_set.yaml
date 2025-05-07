@@ -1,0 +1,57 @@
+# A visualization is a visual representation of a user’s analytical view of the data.
+# You build visualizations from metrics, attributes, and optionally filters that are combined in a way to visualize a particular aspect of your data.
+# The visualizations are executed over and over as fresh data gets loaded.
+# Interpreting the content of a visualization is up to the user (the consumer of the visualization).
+# Read more about visualisations:
+# https://www.gooddata.com/developers/cloud-native/doc/cloud/create-visualizations/concepts/visualization/
+
+type: table
+id: f5e223b2-35a1-4ed4-8369-b2896aa4c8af
+
+title: Details of a set
+
+query:
+  fields:
+    02bc93e4b58043679af5e9989f766369:
+      title: Price
+      aggregation: SUM
+      using: fact/price
+    dc03b2b9a069411e85927f9b161f0900:
+      title: Pieces
+      aggregation: SUM
+      using: fact/pieces
+    2e864b775681433993d78f79c557ee36:
+      title: Minifigs
+      aggregation: SUM
+      using: fact/minifigs
+    daebfb63283d4bea8faa4af5597d8cfb:
+      title: Width
+      aggregation: SUM
+      using: fact/width
+    752fe91891bb41b4be10b9dd80755530:
+      title: Depth
+      aggregation: SUM
+      using: fact/depth
+    1f3b3a1ee1f44699ac2b0b4ced522d6b:
+      title: Weight
+      aggregation: SUM
+      using: label/weight
+
+metrics:
+  - field: 02bc93e4b58043679af5e9989f766369
+    format: "#,##0.00"
+  - field: dc03b2b9a069411e85927f9b161f0900
+    format: "#,##0"
+  - field: 2e864b775681433993d78f79c557ee36
+    format: "#,##0"
+  - field: daebfb63283d4bea8faa4af5597d8cfb
+    format: "#,##0.0"
+  - field: 752fe91891bb41b4be10b9dd80755530
+    format: "#,##0.0"
+  - field: 1f3b3a1ee1f44699ac2b0b4ced522d6b
+    format: "#,##0.0"
+
+config:
+  widths:
+    - value: 77
+  metrics_in: rows

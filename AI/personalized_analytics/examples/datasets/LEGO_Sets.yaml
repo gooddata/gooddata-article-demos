@@ -1,0 +1,119 @@
+# A dataset is a logical object that represents a set of related facts, attributes, and attribute labels.
+# Datasets are basic organization units of a logical data model.
+# Read more about Datasets:
+# https://www.gooddata.com/developers/cloud-native/doc/cloud/model-data/concepts/dataset/
+
+type: dataset
+id: LEGO_Sets
+
+table_path: star_wars/sets
+
+title: LEGO Sets
+description: LEGO Sets
+tags:
+  - LEGO Sets
+
+fields:
+  ean:
+    type: attribute
+    source_column: EAN
+    data_type: STRING
+    title: Ean
+    description: Ean
+    tags:
+      - LEGO Sets
+  number:
+    type: attribute
+    source_column: Number
+    data_type: STRING
+    title: Set
+    description: Set
+    tags:
+      - LEGO Sets
+  setname:
+    source_column: Setname
+    data_type: STRING
+    title: Set name
+    tags:
+      - LEGO Sets
+  subtheme:
+    type: attribute
+    source_column: Subtheme
+    data_type: STRING
+    title: Sub-theme
+    description: Sub-theme
+    tags:
+      - LEGO Sets
+  depth:
+    type: fact
+    source_column: Depth
+    data_type: NUMERIC
+    title: Depth
+    description: Depth
+    tags:
+      - LEGO Sets
+  height:
+    type: fact
+    source_column: Height
+    data_type: NUMERIC
+    title: Height
+    description: Height
+    tags:
+      - LEGO Sets
+  pieces:
+    type: fact
+    source_column: Pieces
+    data_type: NUMERIC
+    title: Pieces
+    description: Pieces
+    tags:
+      - LEGO Sets
+  price:
+    type: fact
+    source_column: Price
+    data_type: NUMERIC
+    title: Price
+    description: Price
+    tags:
+      - LEGO Sets
+  weight:
+    type: fact
+    source_column: Weight
+    data_type: NUMERIC
+    title: Weight
+    description: Weight
+    tags:
+      - LEGO Sets
+  width:
+    type: fact
+    source_column: Width
+    data_type: NUMERIC
+    title: Width
+    description: Width
+    tags:
+      - LEGO Sets
+  minifigs:
+    type: fact
+    source_column: Minifigs
+    data_type: INT
+    title: Minifigs
+    description: Minifigs
+    tags:
+      - LEGO Sets
+
+references:
+  - dataset: exitdate
+    sources:
+      - source_column: Exitdate
+        data_type: DATE
+        target: exitdate
+  - dataset: launchdate
+    sources:
+      - source_column: Launchdate
+        data_type: DATE
+        target: launchdate
+  - dataset: lego_themes
+    sources:
+      - source_column: Theme
+        data_type: STRING
+        target: theme

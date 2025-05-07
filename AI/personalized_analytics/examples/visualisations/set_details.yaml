@@ -1,0 +1,65 @@
+# A visualization is a visual representation of a user’s analytical view of the data.
+# You build visualizations from metrics, attributes, and optionally filters that are combined in a way to visualize a particular aspect of your data.
+# The visualizations are executed over and over as fresh data gets loaded.
+# Interpreting the content of a visualization is up to the user (the consumer of the visualization).
+# Read more about visualisations:
+# https://www.gooddata.com/developers/cloud-native/doc/cloud/create-visualizations/concepts/visualization/
+
+type: table
+id: b4a328b0-2d3b-47dc-8809-804a839545cf
+
+title: Set details
+
+query:
+  fields:
+    02bc93e4b58043679af5e9989f766369:
+      title: Price
+      aggregation: SUM
+      using: fact/price
+    dc03b2b9a069411e85927f9b161f0900:
+      title: Pieces
+      aggregation: SUM
+      using: fact/pieces
+    2e864b775681433993d78f79c557ee36:
+      title: Minifigs
+      aggregation: SUM
+      using: fact/minifigs
+    daebfb63283d4bea8faa4af5597d8cfb:
+      title: Width
+      aggregation: SUM
+      using: fact/width
+    752fe91891bb41b4be10b9dd80755530:
+      title: Depth
+      aggregation: SUM
+      using: fact/depth
+    1f3b3a1ee1f44699ac2b0b4ced522d6b:
+      title: Weight
+      aggregation: SUM
+      using: label/weight
+    c773cc3f46464b108b98e2f75357e7af: label/setname
+    dcfe5fb409e84caba3bb24c81f69d077: label/subtheme
+    d79619297b2d46d68f97a04b3e34b664: label/launchdate.year
+
+  sort_by:
+    - type: attribute_sort
+      by: d79619297b2d46d68f97a04b3e34b664
+      direction: DESC
+
+metrics:
+  - field: 02bc93e4b58043679af5e9989f766369
+    format: "#,##0.00"
+  - field: dc03b2b9a069411e85927f9b161f0900
+    format: "#,##0"
+  - field: 2e864b775681433993d78f79c557ee36
+    format: "#,##0"
+  - field: daebfb63283d4bea8faa4af5597d8cfb
+    format: "#,##0.0"
+  - field: 752fe91891bb41b4be10b9dd80755530
+    format: "#,##0.0"
+  - field: 1f3b3a1ee1f44699ac2b0b4ced522d6b
+    format: "#,##0.0"
+
+view_by:
+  - c773cc3f46464b108b98e2f75357e7af
+  - dcfe5fb409e84caba3bb24c81f69d077
+  - d79619297b2d46d68f97a04b3e34b664

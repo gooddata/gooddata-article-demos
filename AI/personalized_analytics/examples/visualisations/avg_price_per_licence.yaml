@@ -1,0 +1,43 @@
+# A visualization is a visual representation of a user’s analytical view of the data.
+# You build visualizations from metrics, attributes, and optionally filters that are combined in a way to visualize a particular aspect of your data.
+# The visualizations are executed over and over as fresh data gets loaded.
+# Interpreting the content of a visualization is up to the user (the consumer of the visualization).
+# Read more about visualisations:
+# https://www.gooddata.com/developers/cloud-native/doc/cloud/create-visualizations/concepts/visualization/
+
+type: column_chart
+id: 78b60064-544c-4b58-8150-f350b166e7a5
+
+title: Avg price per licence
+
+query:
+  fields:
+    46d52abae088487ca00e53a539bb9eb1:
+      aggregation: AVG
+      using: fact/price
+    868be6f23a7043598f16de1e44e39b6e: label/theme
+
+  filter_by:
+    origin_filter:
+      type: attribute_filter
+      using: label/origin
+      state:
+        include:
+          - Licensed
+
+  sort_by:
+    - type: metric_sort
+      direction: DESC
+      metrics:
+        - 46d52abae088487ca00e53a539bb9eb1
+
+metrics:
+  - field: 46d52abae088487ca00e53a539bb9eb1
+    format: "#,##0.00"
+
+view_by:
+  - 868be6f23a7043598f16de1e44e39b6e
+
+config:
+  xaxis_name_visible: false
+  yaxis_max: 225

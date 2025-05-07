@@ -1,0 +1,148 @@
+There are multiple YAML files containing dataset definitions and visualizations. The dataset files define fields using the following structure:  
+
+```yaml
+fields:
+  ean:
+    type: attribute
+```
+Where:
+- `ean` is the field name.
+- `type` can be `attribute` or `fact`.
+
+In visualization files, fields must be referenced correctly **only if they actually exist in the dataset** and must follow these rules:  
+
+---
+
+### **1. Referencing Dataset Fields in `using` Property**  
+- A dataset field **can only be referenced** in the `using` property **if it exists in the dataset**.  
+- It must be referenced using one of the following formats:
+  - If the field type is `attribute`: `attribute/ean`
+  - If the field type is `fact`: `fact/ean`
+  - If the field is used as a label: `label/ean`
+- Alternatively, `using` can accept a local property defined within the visualization's `query` property.
+- If a field (`ean`) is referenced but **does not exist in the dataset**, it should be flagged as an error.
+
+---
+
+### **2. Defining Local Properties in `query` Property**  
+- Instead of referencing a dataset field in `using`, a local property can be directly defined in `query` using:
+  - `local_property: label/ean` (for label usage)
+  - `local_property: attribute/ean` (for attributes)
+
+---
+
+### **3. Referencing Date Fields with Granularity**  
+- When referencing date fields, the field name from the dataset must match, and granularity should be specified.
+  - Example:  
+    ```yaml
+    year_label: label/launchdate.year
+    ```
+    - `year_label` is the query property.
+    - `launchdate` is the field name in the dataset.
+    - `.year` specifies the required granularity.
+- If `launchdate` does **not** exist in the dataset, this should be flagged as an error.
+
+---
+
+### **4. Referencing Visualization's `query` Fields**  
+Visualization files define query fields that should be referenced correctly in:  
+
+#### **a) `sort_by` Property**  
+- The `sort_by` property must reference a field defined in `query.fields`:
+  ```yaml
+  sort_by:
+    - by: query_property_name
+  ```
+  - `by` must match a valid field from `query.fields`.
+
+#### **b) `metrics`, `view_by`, and `group_by` Properties**  
+- These top-level visualization properties accept either direct strings (local properties) or explicit field references:
+  - Direct string reference:  
+    ```yaml
+    view_by:
+      - 201b72eef5094ae782e5eb9ef3bc5291
+    ```
+  - Explicit field reference:  
+    ```yaml
+    metrics:
+      - field: 9ca7b7711e85442aa47867ba2b05a5c5
+    ```
+
+---
+
+### **5. Validating Dataset References**  
+If a dataset file defines a reference to another dataset using the following structure:
+
+```yaml
+references:
+  - dataset: lego_themes
+    sources:
+      - source_column: Theme
+        data_type: STRING
+        target: theme
+
+#### **Validation Rules:**  
+- The `dataset` value (`lego_themes`) **must exist** as a valid dataset.  
+- The `target` value (`theme`) **must exist as a field in the referenced dataset (`lego_themes`)**.  
+- The `target` value (`theme`) **must be marked as a primary key** in the referenced dataset using the `primary_key` property:
+  ```yaml
+  primary_key: theme
+  ```
+  - The primary key must be a valid field inside the referenced dataset.
+- The `source_column` (`Theme`) **should not be listed** in the dataset's `fields` section to avoid duplication.  
+- The following **incorrect** structure must be flagged as invalid:
+  ```yaml
+  fields:
+    theme:
+      type: attribute
+      source_column: theme
+      data_type: STRING
+  ```
+  - `theme` is already referenced via `references`, so it **should not be redefined** in `fields`.  
+
+---
+
+### **6. Enforcing That Only Existing Fields Are Referenced**  
+- When referencing dataset fields (`label/ean`, `attribute/ean`, or `fact/ean`), **`ean` must actually exist in the dataset**.
+- Any reference to a field that is **not present in the dataset** should be flagged as an error.
+- This applies to:
+  - `using` references  
+  - `query` references  
+  - `sort_by`  
+  - `metrics`, `view_by`, `group_by`  
+  - Date field references with `.year`, `.month`, etc.  
+- Example error case:  
+  ```yaml
+  using: label/nonexistent_field
+  ```
+  - This should be flagged as invalid because `nonexistent_field` is not in `fields` of the dataset.
+
+---
+
+### **7. Primary Key Validation for Referenced Datasets**  
+- If a dataset (`A`) references another dataset (`B`), the `target` field in `B` **must be declared as a primary key**:
+  ```yaml
+  dataset: lego_themes
+  primary_key: theme
+  fields:
+    theme:
+      type: attribute
+      data_type: STRING
+  ```
+- If the primary key is missing, it should be flagged as an error.
+
+---
+
+## **Task**  
+Ensure that:  
+1. **All dataset field references (`using`, `query`, and date references) adhere to the specified rules and reference only existing dataset fields.**  
+2. **Visualization's `query` fields are correctly referenced** in `sort_by`, `metrics`, `view_by`, and `group_by`.  
+3. **Dataset references are validated** to:
+   - Ensure referenced datasets exist.
+   - Ensure target fields exist in the referenced dataset.
+   - Ensure referenced fields are marked as primary keys in the target dataset.
+   - Prevent source columns from being incorrectly duplicated in `fields`.  
+4. **Any inconsistencies or incorrect references are flagged.**  
+5. **Field names match correctly across dataset and visualization files, and only existing fields are used in references.**  
+
+___PROMPT HAS BEEN SHORTENED FOR IP PURPOSES___

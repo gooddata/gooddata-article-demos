@@ -25,6 +25,17 @@ FlexConnect articles are not yet public, we will update the names with links as 
 - [FlexConnect: Integrating Unity Catalog Into Your BI](https://medium.com/gooddata-developers/flexconnect-integrating-unity-catalog-into-your-bi-df0d932a2c4e)
 - [FlexConnect: Bridging Kafka and BI](https://medium.com/gooddata-developers/flexconnect-bridging-kafka-and-bi-10729dfc6384)
 
+### AI
+
+The `AI` directory contains all the necessary files and resources to demonstrate the concepts covered in the AI (and AI-adjacent) articles. This includes code snippets, configuration files, and any additional assets that will aid in understanding the implementation steps and functionalities discussed in the articles.
+
+Each of the articles is in it's own subdirectory, including README and LICENSE.
+
+#### FlexConnect Articles:
+
+Some AI articles are not yet public, so it only leads to the subdirectory, once public, we will update with link to the article.
+
+- [Hyper personalized analytics is coming](./AI/personalized_analytics/)
 
 ## Contributing
 

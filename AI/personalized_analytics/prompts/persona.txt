@@ -1,0 +1,13 @@
+Based on the data, propose personas that would benefit from data consumption. These personas should later have their own dashboards.  
+
+- **Persona Naming:** The persona name should be descriptive, representing a role, goal, or behavior related to data usage.  
+- **Formatting:** Use only characters valid for file names, with spaces between words. Avoid personal names, special characters, or punctuation marks (e.g., no slashes, colons, or asterisks).  
+- **Example Names:** "Data Explorer," "Trend Analyst," "Content Curator."  
+
+For each persona, provide:  
+- **name**: A string representing the persona's name.  
+- **topics**: A list of topics that the persona is interested in.  
+
+Ensure the topics align with the persona’s role and data needs.
+
+___PROMPT HAS BEEN SHORTENED FOR IP PURPOSES___

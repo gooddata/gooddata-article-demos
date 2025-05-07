@@ -1,0 +1,211 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    color: #000;
+    font-feature-settings: 'liga' off, 'clig' off;
+
+    /* Copy */
+    font-family: Avenir;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 23px; /* 164.286% */
+}
+
+button {
+    display: flex;
+    padding: 6.5px 14px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    border-radius: 3px;
+    border: 1px solid #CCD8E2;
+    background: #FCFCFD;
+
+    /* Shadow/Button */
+    box-shadow: 0px 1px 1px 0px rgba(20, 57, 93, 0.05);
+    color: var(--gray-7006-d-7680-com-7, #6D7680);
+    text-align: center;
+    font-family: Avenir;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 19px; /* 135.714% */
+}
+
+button.primary {
+    border-radius: 3px;
+    border: 1px solid var(rgba(0, 0, 0, 0.10));
+    background:#14B2E2;
+    color: white;
+
+    /* Shadow/Button */
+    box-shadow: 0px 1px 1px 0px rgba(20, 57, 93, 0.05);
+    color: #FFF;
+    font-weight: 800;
+}
+
+input[type="text"] {
+    display: flex;
+    padding: 6px 10px 5px 8px;
+    align-items: center;
+    gap: 10px;
+    flex: 1 0 0;
+    border-radius: 3px;
+    border: 1px solid #CCD8E2;
+    background: #FFF;
+    box-shadow: 0px 1px 2px 0px rgba(31, 53, 74, 0.15) inset;
+    overflow: hidden;
+    color: #464E56;
+    text-overflow: ellipsis;
+    font-family: Avenir;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22px; /* 157.143% */
+}
+
+input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    padding: 2px 1px;
+    border-radius: 2px;
+    background: #14B2E2;
+}
+
+button:hover {
+    border: 1px solid #B0BECA;
+    background: #FCFCFD;
+
+    /* Shadow/Button/Secondary/Hover */
+    box-shadow: 0px -2px 0px 0px rgba(176, 190, 202, 0.6) inset;
+}
+
+button.primary:hover {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: #129CC6;
+
+    /* Shadow/Button/Primary/Hover */
+    box-shadow: 0px -2px 0px 0px rgba(0, 0, 0, 0.15) inset;
+}
+
+.form-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* Ensure it's above the iframe */
+}
+
+.dialog {
+    display: flex;
+    width: 440px;
+    overflow: auto;
+    padding: 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+
+    border-radius: 3px;
+    border: 1px solid #DDE4EB;
+    background: #FFF;
+
+    /* Shadow/Basic */
+    box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.10);
+}
+
+.dialog > * {
+    width: 100%;
+}
+
+.dialog-header {
+    color: var(--almost-black-333333, #333);
+    font-feature-settings: 'liga' off, 'clig' off;
+
+    /* Heading pragraph */
+    font-family: Avenir;
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 23px; /* 135.294% */
+}
+
+.dialog-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 300px; /* Set a fixed height */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.dialog-content > * {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+legend {
+    color: #687581;
+}
+
+.dialog-footer {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 10px; /* Add padding between footer elements */
+}
+
+.loading-content {
+    text-align: center;
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border-left-color: #09f;
+    margin: 0 auto 10px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading-text {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Loading overlay */
+.loading-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+    background-color: rgba(239, 241, 243, 0.95);
+}
+
+.loading-overlay>div {
+    color: var(--gd-palette-complementary-5,#b0beca);
+    text-align: center;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: 400;
+    font-size: 16px;
+}

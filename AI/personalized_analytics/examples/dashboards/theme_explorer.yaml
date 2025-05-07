@@ -1,0 +1,122 @@
+# A dashboard is a collection of visualizations that are organized into sections.
+# Because they allow filtering and other adjustments, they function as a dynamic presentation layer for your data analytics.
+# Read more about dashboards:
+# https://www.gooddata.com/docs/cloud/create-dashboards/concepts/dashboard/
+
+type: dashboard
+id: df82d6d6-34bf-4fed-bab1-f1789c52b62f
+
+title: Theme explorer
+
+sections:
+  - widgets:
+      - id: faea9a1d-f6ea-46e6-bca3-291b385a338a
+        visualization: 53ba9622-1856-464e-85cc-8ae359a29f11
+        title: AVG Annual Growth
+        columns: 2
+        rows: 14
+      - id: de16378a-032c-4a69-a8bd-b0d502e251b3
+        visualization: 9f287cf7-5ae8-4503-bb58-19cf6c69000d
+        title: "# of sets"
+        columns: 2
+        rows: 14
+      - id: 004bac54-0323-462f-b025-cb28639a3b90
+        visualization: 47409eed-a81d-4317-9d44-56f36b7e9e53
+        title: "#of sets by year"
+        columns: 8
+        rows: 14
+  - title: Theme highlights
+    widgets:
+      - id: 986f478c-ed8f-4706-bc54-ada44f2887e2
+        visualization: bf64a8b0-0569-436d-96c2-b36c541cf76d
+        title: 10 largest sets
+        columns: 6
+        rows: 22
+        date: exitdate
+        ignored_filters:
+          - label/theme
+      - id: a27e170a-0788-4e7a-8dfc-b841ab72f525
+        visualization: b523a170-b315-4a29-8ae0-805789a16113
+        title: 10 most expensive sets
+        columns: 6
+        rows: 22
+        date: exitdate
+  - title: Theme prices
+    widgets:
+      - id: 3f61eb17-7cc6-4bf4-9a10-ee4bf018f2da
+        visualization: e24984ba-0d40-4809-9cd8-7d276684e559
+        title: Price distribution
+        columns: 12
+        rows: 22
+        date: exitdate
+        zoom_data: true
+        interactions:
+          - click_on: 73b2e6ca3e4c40daa4723cb7017ff5fd
+            open_visualization: b4a328b0-2d3b-47dc-8809-804a839545cf
+      - id: 7d257f78-ab5d-4c87-b77d-bf990ba57acc
+        visualization: d5d4fb89-18c7-450f-ae3a-cfbc3ae8882a
+        title: Comparison of set size vs price
+        columns: 6
+        rows: 25
+        date: exitdate
+      - id: b30cd3fe-1118-486e-a3fb-c153467b458a
+        visualization: b44ac52d-39d0-4d22-81b9-1675ba3e5118
+        title: Comparison of release year and price
+        columns: 6
+        rows: 25
+        date: exitdate
+      - id: 2a8f948f-0372-454b-b496-065d0e40ab45
+        visualization: 5b228c3c-e5fe-4ac1-9091-ef1119430403
+        title: Comparison of set volume, pieces and weight
+        columns: 12
+        rows: 26
+        date: exitdate
+  - title: Minifigs
+    widgets:
+      - id: 6577cf82-cae6-4a42-b713-211528ee3d4a
+        visualization: 8c3b6dcf-137b-453e-ba3a-f2b9bf8cb3c0
+        title: Minifigs by sub-theme
+        columns: 6
+        rows: 26
+        date: exitdate
+      - id: a902d6d6-05b5-4efa-ae54-f748ea69b795
+        visualization: 2a69b2f5-bd44-4bb2-9f3b-05086de96df6
+        title: Correlation of minifigs and price
+        columns: 6
+        rows: 26
+        date: exitdate
+  - title: All sets in the theme
+    widgets:
+      - id: 80845ce0-3a08-4733-917f-17e793ab7eee
+        visualization: b4a328b0-2d3b-47dc-8809-804a839545cf
+        title: false
+        columns: 12
+        rows: 40
+        date: exitdate
+
+filters:
+  date_year:
+    type: date_filter
+    granularity: YEAR
+    from: 0
+    to: 0
+  c462c67c8a5b47d1942321aa73692e7d:
+    type: attribute_filter
+    using: label/theme
+    multiselect: false
+    state:
+      include:
+        - Star Wars
+    parents:
+      - 57bb3807d01f4e1b9e2fb2ae6f6ef3b0
+  c0bdb4daa1b646acb26e9eb03be5abd0:
+    type: attribute_filter
+    using: label/subtheme
+    parents:
+      - c462c67c8a5b47d1942321aa73692e7d
+      - 57bb3807d01f4e1b9e2fb2ae6f6ef3b0
+  57bb3807d01f4e1b9e2fb2ae6f6ef3b0:
+    type: attribute_filter
+    using: label/setname.setname
+    parents:
+      - c0bdb4daa1b646acb26e9eb03be5abd0

@@ -1,0 +1,210 @@
+{
+    "type": "json_schema",
+    "json_schema": {
+        "name": "dashboards_schema",
+        "schema": {
+            "type": "object",
+            "properties": {
+                "dashboards": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "type": "string",
+                                "enum": ["dashboard"]
+                            },
+                            "id": {
+                                "type": "string",
+                                "description": "Unique identifier for the dashboard"
+                            },
+                            "title": {
+                                "type": "string",
+                                "description": "Title of the dashboard"
+                            },
+                            "description": {
+                                "type": "string"
+                            },
+                            "tags": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "filters": {
+                                "type": "object",
+                                "patternProperties": {
+                                    "^[a-zA-Z0-9_]+$": {
+                                        "type": "object",
+                                        "properties": {
+                                            "type": {
+                                                "type": "string",
+                                                "enum": ["date_filter", "attribute_filter"]
+                                            },
+                                            "title": {
+                                                "type": "string"
+                                            },
+                                            "mode": {
+                                                "type": "string",
+                                                "enum": ["readonly", "hidden", "active"]
+                                            },
+                                            "date": {
+                                                "type": "string"
+                                            },
+                                            "from": {
+                                                "type": "string"
+                                            },
+                                            "to": {
+                                                "type": "string"
+                                            },
+                                            "granularity": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "MINUTE", "HOUR", "DAY", "WEEK", "MONTH", "QUARTER", "YEAR",
+                                                    "MINUTE_OF_HOUR", "HOUR_OF_DAY", "DAY_OF_WEEK", "DAY_OF_MONTH", "DAY_OF_YEAR",
+                                                    "WEEK_OF_YEAR", "MONTH_OF_YEAR", "QUARTER_OF_YEAR"
+                                                ]
+                                            },
+                                            "using": {
+                                                "type": "string",
+                                                "description": "Reference to the ID of the field in dataset"
+                                            },
+                                            "multiselect": {
+                                                "type": "boolean"
+                                            },
+                                            "parents": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "state": {
+                                                "type": "object",
+                                                "description": "Optional initial state of the filter. Omit this property to filter to all values",
+                                                "properties": {
+                                                    "include": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "exclude": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "required": ["type"]
+                                    }
+                                }
+                            },
+                            "cross_filtering": {
+                                "type": "boolean"
+                            },
+                            "sections": {
+                                "type": "array",
+                                "description": "Each section represents a single row in the dashboard",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "title": {
+                                            "type": "string"
+                                        },
+                                        "description": {
+                                            "type": "string"
+                                        },
+                                        "widgets": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "visualization": {
+                                                        "type": "string",
+                                                        "description": "ID of an existing visualization that should be displayed on the dashboard"
+                                                    },
+                                                    "title": {
+                                                        "type": "string"
+                                                    },
+                                                    "description": {
+                                                        "type": "string"
+                                                    },
+                                                    "columns": {
+                                                        "type": "integer",
+                                                        "minimum": 1,
+                                                        "maximum": 12
+                                                    },
+                                                    "rows": {
+                                                        "type": "integer",
+                                                        "minimum": 1
+                                                    },
+                                                    "ignored_filters": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string",
+                                                            "description": "List of filters which should be ignored for this widget. The value should be the same as the using property in the filter. Not filter ID."
+                                                        }
+                                                    },
+                                                    "zoom_data": {
+                                                        "type": "boolean"
+                                                    },
+                                                    "interactions": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "click_on": {
+                                                                    "type": "string",
+                                                                    "description": "Query field ID in the referenced visualisation. Possibly ID of the visualisation attribute or fact used in the query prop."
+                                                                },
+                                                                "open_url": {
+                                                                    "type": "string"
+                                                                },
+                                                                "open_dashboard": {
+                                                                    "type": "string"
+                                                                },
+                                                                "open_visualization": {
+                                                                    "type": "string"
+                                                                },
+                                                                "href": {
+                                                                    "type": "string"
+                                                                },
+                                                                "label": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "anyOf": [
+                                                                {
+                                                                    "required": ["click_on", "open_url"]
+                                                                },
+                                                                {
+                                                                    "required": ["click_on", "open_dashboard"]
+                                                                },
+                                                                {
+                                                                    "required": ["click_on", "open_visualization"]
+                                                                },
+                                                                {
+                                                                    "required": ["click_on", "href", "label"]
+                                                                }
+                                                            ]
+                                                        }
+                                                    }
+                                                },
+                                                "required": ["visualization"]
+                                            }
+                                        }
+                                    },
+                                    "required": ["widgets"]
+                                }
+                            }
+                        },
+                        "required": ["type", "id"]
+                    }
+                }
+            },
+            "required": ["dashboards"]
+        }
+    }
+}
