@@ -1,0 +1,32 @@
+{
+    "type": "json_schema",
+    "json_schema": {
+        "name": "personas_schema",
+        "schema": {
+            "type": "object",
+            "properties": {
+                "personas": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "description": "The name of the persona."
+                            },
+                            "topics": {
+                                "type": "array",
+                                "items": {"type": "string"},
+                                "description": "A list of topics that the persona is interested in."
+                            }
+                        },
+                        "required": ["name", "topics"],
+                        "additionalProperties": false
+                    }
+                }
+            },
+            "required": ["personas"],
+            "additionalProperties": false
+        }
+    }
+}

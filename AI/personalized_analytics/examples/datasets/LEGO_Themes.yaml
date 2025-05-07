@@ -1,0 +1,42 @@
+# A dataset is a logical object that represents a set of related facts, attributes, and attribute labels.
+# Datasets are basic organization units of a logical data model.
+# Read more about Datasets:
+# https://www.gooddata.com/developers/cloud-native/doc/cloud/model-data/concepts/dataset/
+
+type: dataset
+id: lego_themes
+
+table_path: star_wars/themes
+
+title: Themes
+description: Themes
+tags:
+  - Themes
+
+primary_key: theme
+
+fields:
+  origin:
+    type: attribute
+    source_column: origin
+    data_type: STRING
+    title: Origin
+    description: Origin
+    tags:
+      - Themes
+  theme:
+    type: attribute
+    source_column: theme
+    data_type: STRING
+    title: Theme
+    description: Theme
+    tags:
+      - Themes
+  annual_growth:
+    type: fact
+    source_column: annual_growth
+    data_type: NUMERIC
+    title: Annual Growth
+    description: Annual Growth
+    tags:
+      - Themes

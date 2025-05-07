@@ -1,0 +1,191 @@
+{
+    "type": "json_schema",
+    "json_schema": {
+        "name": "datasets_schema",
+        "schema": {
+            "type": "object",
+            "properties": {
+                "datasets": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "type": "string",
+                                "enum": ["dataset", "date"]
+                            },
+                            "id": {
+                                "type": "string",
+                                "description": "A unique identifier of the dataset or date instance."
+                            },
+                            "title": {
+                                "type": "string",
+                                "description": "An optional human readable title. Will be derived from id if not provided explicitly."
+                            },
+                            "description": {
+                                "type": "string",
+                                "description": "An optional description."
+                            },
+                            "tags": {
+                                "type": "array",
+                                "items": {"type": "string"},
+                                "description": "A list of strings - metadata tags."
+                            },
+                            "table_path": {
+                                "type": "string",
+                                "description": "A table path in the data source delimited by / character.",
+                                "pattern": "^(?!\\.)[.A-Za-z0-9_/-]{1,255}$"
+                            },
+                            "sql": {
+                                "type": "string",
+                                "description": "A SQL statement that represents a table."
+                            },
+                            "primary_key": {
+                                "oneOf": [
+                                    {
+                                        "type": "string",
+                                        "description": "A primary key for the given dataset. Always to try find a primary key, or this dataset cannot be referenced."
+                                    },
+                                    {
+                                        "type": "array",
+                                        "items": {"type": "string"},
+                                        "uniqueItems": true,
+                                        "description": "A composite primary key for the given dataset."
+                                    }
+                                ]
+                            },
+                            "fields": {
+                                "type": "object",
+                                "patternProperties": {
+                                    "^[a-zA-Z_][a-zA-Z0-9_]*$": {
+                                        "description": "Field identifier. Each field needs to have an unique identifier across all datasets. Don't create a field for element that will be used to reference another dataset.", 
+                                        "type": "object",
+                                        "properties": {
+                                            "type": {
+                                                "type": "string",
+                                                "enum": ["fact", "attribute"],
+                                                "description": "The type of the field."
+                                            },
+                                            "title": {
+                                                "type": "string",
+                                                "description": "An optional human-readable title for the dataset. Derived from file name if not provided explicitly."
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "description": "An optional description of the field."
+                                            },
+                                            "tags": {
+                                                "type": "array",
+                                                "items": {"type": "string"},
+                                                "description": "An optional list of tags."
+                                            },
+                                            "source_column": {
+                                                "type": "string",
+                                                "description": "An optional source column for the field, defaults to the field name."
+                                            },
+                                            "data_type": {
+                                                "type": "string",
+                                                "enum": ["INT", "STRING", "DATE", "NUMERIC", "TIMESTAMP", "TIMESTAMP_TZ", "BOOLEAN"],
+                                                "description": "A datatype of the source column."
+                                            },
+                                            "sort_column": {
+                                                "type": "string",
+                                                "description": "A column name in the source table to do sorting by."
+                                            },
+                                            "sort_direction": {
+                                                "type": "string",
+                                                "enum": ["ASC", "DESC"],
+                                                "description": "A direction of the sorting."
+                                            },
+                                            "default_view": {
+                                                "type": "string",
+                                                "description": "Default label to use in the case of attribute type of field with multiple labels."
+                                            } 
+                                        },
+                                        "required": ["type"],
+                                        "additionalProperties": false
+                                    }
+                                },
+                                "description": "A list of fields in this dataset. Make sure the field name is a valid JS/YAML property name. Make all field names in lower case syntax. Do not put there characters like parentheses."
+                            },
+                            "references": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "dataset": {
+                                            "type": "string",
+                                            "description": "The ID of the dataset being referenced."
+                                        },
+                                        "sources": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "data_type": {
+                                                        "type": "string",
+                                                        "description": "The data type of the source column."
+                                                    },
+                                                    "source_column": {
+                                                        "type": "string",
+                                                        "description": "The source column in the current dataset."
+                                                    },
+                                                    "target": {
+                                                        "type": "string",
+                                                        "description": "The ID of the primary key in the referenced dataset. The ID needs to exist in the other dataset."
+                                                    }
+                                                },
+                                                "required": ["data_type", "source_column", "target"],
+                                                "additionalProperties": false
+                                            },
+                                            "description": "A list of source definitions for the reference."
+                                        }
+                                    },
+                                    "required": ["dataset", "sources"],
+                                    "additionalProperties": false
+                                },
+                                "description": "A list of references, specifying the relations between datasets."
+                            },
+                            "workspace_data_filters": {
+                                "type": "array",
+                                "items": {"type": "object"},
+                                "description": "A list of workspace data filters to be applied to the dataset."
+                            },
+                            "data_source": {
+                                "type": "string",
+                                "description": "An optional data source id used for the specific dataset."
+                            },
+                            "title_base": {
+                                "type": "string",
+                                "description": "A title for the title formatting",
+                                "maxLength": 255
+                            },
+                            "title_pattern": {
+                                "type": "string",
+                                "description": "A pattern for the title formatting",
+                                "maxLength": 255
+                            },
+                            "granularities": {
+                                "type": "array",
+                                "uniqueItems": true,
+                                "items": {
+                                    "type": "string",
+                                    "enum": [
+                                        "MINUTE", "HOUR", "DAY", "WEEK", "WEEK_US", "MONTH", "QUARTER", "YEAR",
+                                        "MINUTE_OF_HOUR", "HOUR_OF_DAY", "DAY_OF_WEEK", "DAY_OF_WEEK_EU", "DAY_OF_MONTH",
+                                        "DAY_OF_YEAR", "DAY_OF_QUARTER", "WEEK_OF_YEAR", "WEEK_OF_YEAR_EU", "WEEK_OF_QUARTER_EU",
+                                        "WEEK_OF_QUARTER", "MONTH_OF_YEAR", "MONTH_OF_QUARTER", "QUARTER_OF_YEAR"
+                                    ]
+                                }
+                            }
+                        },
+                        "required": ["id", "type"],
+                        "additionalProperties": false
+                    }
+                }
+            },
+            "required": ["datasets"],
+            "additionalProperties": false
+        }
+    }
+}

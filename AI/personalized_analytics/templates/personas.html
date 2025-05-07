@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoodData Demo</title>
+    <link rel="shortcut icon" href="https://www.gooddata.com/favicon.ico">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="form-overlay">
+        <form class="dialog" id="personaForm" method="GET" action="/dashboards">
+            <h2 class="dialog-header">Generate analytics</h2>
+            <div class="dialog-content">
+                <legend>Select which personas should use the analytics:</legend>
+                {% for persona in data %}
+                <label><input type="checkbox" name="personas" value="{{ persona }}"> {{ persona }}</label>
+                {% endfor %}
+                <legend>Not happy with the options? Add your own:</legend>
+                <input type="text" name="additional_text" placeholder="Other">
+            </div>
+            <div class="dialog-footer">
+                <button id="cancelButton" type="button">Cancel</button>
+                <button class="primary" type="submit">Generate</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <div class="loading-text">Preparing personalised analytics for your users. This might take a minute…</div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to show the overlay on form submission
+        document.getElementById('personaForm').addEventListener('submit', function() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        });
+    </script>
+
+</body>
+</html>

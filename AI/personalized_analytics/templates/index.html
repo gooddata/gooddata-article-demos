@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoodData Demo</title>
+    <link rel="shortcut icon" href="https://www.gooddata.com/favicon.ico">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="form-overlay">
+        <form class="dialog" id="personaForm" method="GET" action="/personas">
+            <h2 class="dialog-header">Select your data source</h2>
+            <div class="dialog-content">
+                {% for data_source in data %}
+                <label><input type="checkbox" name="data_source" value="{{ data_source.id }}"> {{ data_source.name }}</label>
+                {% endfor %}
+            </div>
+            <div class="dialog-footer">
+                <button class="primary" type="submit">Select</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <div class="loading-text">Understanding your data. This might take some time…</div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to show the overlay on form submission
+        document.getElementById('personaForm').addEventListener('submit', function() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        });
+    </script>
+
+</body>
+</html>

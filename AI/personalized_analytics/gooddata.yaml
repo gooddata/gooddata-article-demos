@@ -1,0 +1,8 @@
+profiles:
+  dev:
+    host: $GOODDATA_HOST
+    token: $GOODDATA_API_TOKEN
+    workspace_id: demo
+    data_source: demo_ds
+source_dir: analytics
+default_profile: dev

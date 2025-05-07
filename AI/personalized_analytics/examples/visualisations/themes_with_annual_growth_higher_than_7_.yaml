@@ -1,0 +1,48 @@
+# A visualization is a visual representation of a user’s analytical view of the data.
+# You build visualizations from metrics, attributes, and optionally filters that are combined in a way to visualize a particular aspect of your data.
+# The visualizations are executed over and over as fresh data gets loaded.
+# Interpreting the content of a visualization is up to the user (the consumer of the visualization).
+# Read more about visualisations:
+# https://www.gooddata.com/developers/cloud-native/doc/cloud/create-visualizations/concepts/visualization/
+
+type: column_chart
+id: 2922a209-0062-496e-9623-e0d1073fbe9f
+
+title: Themes with annual growth higher than 7%
+
+query:
+  fields:
+    9ca7b7711e85442aa47867ba2b05a5c5:
+      aggregation: SUM
+      using: fact/annual_growth
+    201b72eef5094ae782e5eb9ef3bc5291: label/theme
+    ca26b54ef6224dc39bdea12427a961eb: label/origin
+
+  filter_by:
+    9ca7b7711e85442aa47867ba2b05a5c5_filter:
+      type: ranking_filter
+      using: 9ca7b7711e85442aa47867ba2b05a5c5
+      top: 10
+
+  sort_by:
+    - type: attribute_sort
+      by: 201b72eef5094ae782e5eb9ef3bc5291
+      direction: DESC
+      aggregation: SUM
+
+metrics:
+  - field: 9ca7b7711e85442aa47867ba2b05a5c5
+    format: "#,##0.00%"
+
+view_by:
+  - 201b72eef5094ae782e5eb9ef3bc5291
+
+segment_by:
+  - ca26b54ef6224dc39bdea12427a961eb
+
+config:
+  data_totals: false
+  legend_position: bottom
+  xaxis_name_visible: false
+  yaxis_max: 0.25
+  yaxis_name_visible: false

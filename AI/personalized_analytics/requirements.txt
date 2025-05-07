@@ -1,0 +1,6 @@
+flask~=3.1.0
+flask_cors~=5.0.1
+openai~=1.77.0
+dotenv~=0.9.9
+PyYAML~=6.0.2
+gooddata_sdk~=1.41.0

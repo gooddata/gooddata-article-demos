@@ -1,0 +1,30 @@
+# A visualization is a visual representation of a user’s analytical view of the data.
+# You build visualizations from metrics, attributes, and optionally filters that are combined in a way to visualize a particular aspect of your data.
+# The visualizations are executed over and over as fresh data gets loaded.
+# Interpreting the content of a visualization is up to the user (the consumer of the visualization).
+# Read more about visualisations:
+# https://www.gooddata.com/developers/cloud-native/doc/cloud/create-visualizations/concepts/visualization/
+
+type: pie_chart
+id: minifig_distribution_themes
+
+title: Minifig Distribution by Theme
+description: Display the proportion of minifigs distributed across different LEGO themes.
+
+query:
+  fields:
+    total_minifigs_metric:
+      title: Total Minifigs
+      aggregation: SUM
+      using: fact/minifigs
+    theme_label: label/theme
+
+metrics:
+  - field: total_minifigs_metric
+    format: "#,##0"
+
+view_by:
+  - theme_label
+
+config:
+  legend_position: bottom

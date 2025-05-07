@@ -1,0 +1,131 @@
+# A dashboard is a collection of visualizations that are organized into sections.
+# Because they allow filtering and other adjustments, they function as a dynamic presentation layer for your data analytics.
+# Read more about dashboards:
+# https://www.gooddata.com/docs/cloud/create-dashboards/concepts/dashboard/
+
+type: dashboard
+id: ca219ed5-01c5-4b43-bc44-ac8ae4da37d6
+
+title: LEGO Star Wars
+
+sections:
+  - title: Licensed LEGO sets
+    description: Only small portion of LEGO sets are licensed.
+    widgets:
+      - visualization: d0be7dcb-3162-49fd-a046-e67a815ec9ef
+        title: "# of licensed sets"
+        columns: 2
+        rows: 15
+        date: exitdate
+      - visualization: e1ae69ca-1499-4b95-950b-092d06e614c6
+        title: Comparison of prices
+        columns: 6
+        rows: 15
+        date: exitdate
+      - visualization: c5b34ac8-4d0e-41a0-bb35-7b63e083b975
+        title: Comparison of annual growth
+        columns: 4
+        rows: 15
+      - visualization: 11386365-7a36-48b3-ba35-c40b86612310
+        title: "# of sets in licensed themes"
+        columns: 12
+        rows: 26
+        date: exitdate
+  - title: LEGO sets price
+    description: The first 3 most expensive LEGO sets are all from Star Wars
+    widgets:
+      - visualization: b523a170-b315-4a29-8ae0-805789a16113
+        title: false
+        columns: 6
+        rows: 17
+        date: exitdate
+      - content: |-
+          # 1. Millenium Falcon (2017)
+
+          ![Millennium Falcon](https://images.brickset.com/sets/small/75192-1.jpg)
+        columns: 2
+        rows: 17
+      - content: |-
+          # 2. AT-AT (2021)
+
+          ![Millennium Falcon](https://images.brickset.com/sets/small/75313-1.jpg)
+        columns: 2
+        rows: 17
+      - content: |-
+          # 3. Imperial Star Destroyer (2019)
+
+          ![Millennium Falcon](https://images.brickset.com/sets/small/75252-1.jpg)
+        columns: 2
+        rows: 17
+      - visualization: 78b60064-544c-4b58-8150-f350b166e7a5
+        title: Average price per license
+        columns: 12
+        rows: 27
+        date: exitdate
+  - title: LEGO sets size
+    description: 3 Star Wars sets made it to the top 10
+    widgets:
+      - visualization: bf64a8b0-0569-436d-96c2-b36c541cf76d
+        title: false
+        columns: 6
+        rows: 18
+        date: exitdate
+      - content: |-
+          # 5. Millenium Falcon (2017)
+
+          ![Millennium Falcon](https://images.brickset.com/sets/small/75192-1.jpg)
+        columns: 2
+        rows: 18
+      - content: |-
+          # 6. AT-AT (2021)
+
+          ![Millennium Falcon](https://images.brickset.com/sets/small/75313-1.jpg)
+        columns: 2
+        rows: 18
+      - content: |-
+          # 7. The Razor Crest (2022)
+
+          ![The Razor Crest](https://images.brickset.com/sets/small/75331-1.jpg)
+        columns: 2
+        rows: 18
+  - title: LEGO as an investment
+    widgets:
+      - visualization: 53ba9622-1856-464e-85cc-8ae359a29f11
+        title: AVG Annual Growth
+        columns: 2
+        rows: 12
+      - visualization: 545aeab8-d4d7-4d9d-ba41-1196dd9b355f
+        title: Annual growth of licensed vs native sets
+        columns: 4
+        rows: 12
+      - visualization: 2922a209-0062-496e-9623-e0d1073fbe9f
+        title: Top 10 themes for investments
+        columns: 12
+        rows: 24
+        date: exitdate
+      - visualization: b3b7fd03-9ba9-4176-bd26-6b083d4ccb96
+        title: Correlation between annual growth and size
+        columns: 6
+        rows: 22
+        date: exitdate
+      - visualization: a3e77a80-ad4f-4dae-81ba-4f80ba609640
+        title: Correlation between annual growth and price
+        columns: 6
+        rows: 22
+        date: exitdate
+      - visualization: f01c5d35-80ae-447d-8dde-79d71099e634
+        title: Correlation between release year and annual growth
+        columns: 6
+        rows: 22
+        date: exitdate
+  - widgets:
+      - visualization: 0ecb4064-cbe3-4ffa-a1c9-915844012cb8
+        title: Corelation between minifigs and annual growth
+        columns: 12
+        rows: 40
+        date: exitdate
+
+filters:
+  common_day:
+    type: date_filter
+    mode: hidden
